@@ -1,0 +1,9 @@
+Thumbs.db
+*.exe
+*.bak
+*.orig
+*.log
+target/
+.settings/
+.classpath
+.project
