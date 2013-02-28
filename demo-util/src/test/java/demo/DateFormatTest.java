@@ -1,21 +1,21 @@
 package demo;
 
-import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 
-import demo.model.User;
+public class DateFormatTest {
 
-public class JacksonTest {
+    private static final Date EPOCH = new Date(0);
 
     private static ObjectMapper mapper = new ObjectMapper(); // create once, reuse
 
@@ -43,20 +43,19 @@ public class JacksonTest {
     }
 
     @Test
-    public void testDataBinding() throws JsonGenerationException, JsonMappingException, IOException {
-        DateTime birthday = new DateTime(1984, 11, 30, 0, 0);
-        int age = DateTime.now().getYear() - birthday.getYear();
+    public void testJodaDateTime() {
+        System.out.println("Joda DateTime: " + new DateTime(EPOCH).toString());
+    }
 
-        User user = new User();
-        user.setId("0001");
-        user.setName("Roger");
-        user.setBirthday(birthday.toGregorianCalendar());
+    @Test
+    public void testStdDateFormat() {
+        DateFormat dateFormat = new StdDateFormat();
+        System.out.println("StdDateFormat: " + dateFormat.format(EPOCH.getTime()));
+    }
 
-        user.setAge(age);
-        user.setLastLoginTime(new Date(System.currentTimeMillis()));
-        user.setOnline(true);
-
-        String result = mapper.writeValueAsString(user);
-        System.out.println(result);
+    @Test
+    public void testISO8601DateFormat() {
+        DateFormat dateFormat = new ISO8601DateFormat();
+        System.out.println("ISO8601DateFormat: " + dateFormat.format(EPOCH.getTime()));
     }
 }
