@@ -3,6 +3,8 @@ package demo;
 import java.text.DateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,18 +46,25 @@ public class DateFormatTest {
 
     @Test
     public void testJodaDateTime() {
-        System.out.println("Joda DateTime: " + new DateTime(EPOCH).toString());
+        DateTime epoch = new DateTime(EPOCH);
+        System.out.println(epoch.getClass().getName() + ": " + epoch.toString());
     }
 
     @Test
     public void testStdDateFormat() {
         DateFormat dateFormat = new StdDateFormat();
-        System.out.println("StdDateFormat: " + dateFormat.format(EPOCH.getTime()));
+        System.out.println(dateFormat.getClass().getName() + ": " + dateFormat.format(EPOCH.getTime()));
     }
 
     @Test
     public void testISO8601DateFormat() {
         DateFormat dateFormat = new ISO8601DateFormat();
-        System.out.println("ISO8601DateFormat: " + dateFormat.format(EPOCH.getTime()));
+        System.out.println(dateFormat.getClass().getName() + ": " + dateFormat.format(EPOCH.getTime()));
+    }
+
+    @Test
+    public void testDateFormatUtils() {
+        FastDateFormat dateFormat = DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT;
+        System.out.println(dateFormat.getClass().getName() + ": " + dateFormat.format(EPOCH));
     }
 }
