@@ -1,14 +1,15 @@
 package demo.model;
 
 import java.util.Calendar;
-import java.util.Date;
+
+import org.joda.time.DateTime;
 
 public class User {
     private String id;
     private String name;
     private Calendar birthday;
     private int age;
-    private Date lastLoginTime;
+    private DateTime lastLoginTime;
     private boolean isOnline;
 
     public String getId() {
@@ -43,11 +44,11 @@ public class User {
         this.age = age;
     }
 
-    public Date getLastLoginTime() {
+    public DateTime getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Date lastLoginTime) {
+    public void setLastLoginTime(DateTime lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

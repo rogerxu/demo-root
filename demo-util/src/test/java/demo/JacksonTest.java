@@ -1,6 +1,8 @@
 package demo;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.FieldPosition;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -12,6 +14,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.ISO8601Utils;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 import demo.model.User;
 
@@ -21,6 +26,8 @@ public class JacksonTest {
 
     @BeforeClass
     public static void setUp() {
+        mapper.registerModule(new JodaModule());
+
         // SerializationFeature for changing how JSON is written
 
         // to enable standard indentation ("pretty-printing"):
@@ -40,6 +47,26 @@ public class JacksonTest {
 
         // to allow coercion of JSON empty String ("") to null Object value:
         mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+
+        // set ISO8601 date format to ObjectMapper
+        setISODateFormat();
+    }
+
+    private static void setISODateFormat() {
+        // set ISO8601 date format to ObjectMapper
+        DateFormat iso8601DateFormat = new ISO8601DateFormat() {
+
+            private static final long serialVersionUID = 537585793275937L;
+
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+                String value = ISO8601Utils.format(date, true);
+                toAppendTo.append(value);
+                return toAppendTo;
+            }
+        };
+
+        mapper.setDateFormat(iso8601DateFormat);
     }
 
     @Test
@@ -53,10 +80,13 @@ public class JacksonTest {
         user.setBirthday(birthday.toGregorianCalendar());
 
         user.setAge(age);
-        user.setLastLoginTime(new Date(System.currentTimeMillis()));
+        user.setLastLoginTime(new DateTime(System.currentTimeMillis()));
         user.setOnline(true);
 
         String result = mapper.writeValueAsString(user);
         System.out.println(result);
+
+        Date date =  mapper.readValue("2012-01-02", Date.class);
+        System.out.println(date);
     }
 }
