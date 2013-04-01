@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -15,8 +16,12 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <!-- Eclipse WTP: context name -->
+        <web.context.name>${project.artifactId}</web.context.name>
+
         <servlet.version>3.0.1</servlet.version>
         <tomcat.version>7.0.37</tomcat.version>
+        <jetty.version>9.0.0.M5</jetty.version>
         <sqlite4java.version>0.282</sqlite4java.version>
         <sqlite4java.os>win32</sqlite4java.os> <!-- win32, linux, or macosx -->
         <sqlite4java.platform>x64</sqlite4java.platform> <!-- x86, x64, or ia64 -->
@@ -84,11 +89,32 @@
 
     <build>
         <plugins>
-            <!-- Copy native dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
+                    <!-- Copy external WARs -->
+                    <execution>
+                        <id>copy-wars</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/wars</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.dojotoolkit</groupId>
+                                    <artifactId>dojo-war</artifactId>
+                                    <version>1.8.0</version>
+                                    <type>war</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <!-- Copy native dependencies -->
                     <execution>
                         <id>copy-native-dependencies</id>
                         <phase>prepare-package</phase>
@@ -110,6 +136,55 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Jetty -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/${web.context.name}</contextPath>
+                        <defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
+                    </webApp>
+                    <contextHandlers>
+                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                            <war>${project.build.directory}/wars/dojo-war.war</war>
+                            <contextPath>/dojo-war</contextPath>
+                        </contextHandler>
+                    </contextHandlers>
+                </configuration>
+            </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[2.1,)</versionRange>
+                                        <goals>
+                                            <goal>copy</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
