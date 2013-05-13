@@ -10,7 +10,11 @@
         var item = {};
         var jqItem = jQuery(this);
 
-        var allTitle = jqItem.find("div.item-show > div.title > a").text().trim();
+        var link = jqItem.find("div.item-show > div.title > a");
+        var url = link.attr("href");
+        item.url = url;
+
+        var allTitle = link.text().trim();
         var titles = allTitle.split(" / ");
         item.chsTitle = titles[0];
         item.rawTitle = titles[1] || item.chsTitle;
@@ -18,9 +22,11 @@
         return item;
     });
 
+    // update storage
     jQuery.merge(items, newItems);
     storage.setItem(key, JSON.stringify(items));
 
+    // export to text
     var str = storage.getItem(key) || JSON.stringify([]);
     var items = JSON.parse(str);
     var titles = items.map(function(item) {
@@ -104,72 +110,3 @@ matches.sort(function(a, b) {
 });
 
 localStorage.setItem("matches", JSON.stringify(matches));
-
-// matches
-var matches_imdb = [
-    {
-        "chsTitle": "教父",
-        "rawTitle": "The Godfather",
-        "imdbRank": 2
-    },
-    {
-        "chsTitle": "生活多美好",
-        "rawTitle": "It's a Wonderful Life",
-        "imdbRank": 29
-    },
-    {
-        "chsTitle": "被解救的姜戈",
-        "rawTitle": "Django Unchained",
-        "imdbRank": 45
-    },
-    {
-        "chsTitle": "钢琴家",
-        "rawTitle": "The Pianist",
-        "imdbRank": 48
-    },
-    {
-        "chsTitle": "暖暖内含光",
-        "rawTitle": "Eternal Sunshine of the Spotless Mind",
-        "imdbRank": 78
-    },
-    {
-        "chsTitle": "莫扎特传",
-        "rawTitle": "Amadeus",
-        "imdbRank": 91
-    },
-    {
-        "chsTitle": "两杆大烟枪",
-        "rawTitle": "Lock, Stock and Two Smoking Barrels",
-        "imdbRank": 136
-    },
-    {
-        "chsTitle": "勇士",
-        "rawTitle": "Warrior",
-        "imdbRank": 154
-    },
-    {
-        "chsTitle": "荒野生存",
-        "rawTitle": "Into the Wild",
-        "imdbRank": 162
-    },
-    {
-        "chsTitle": "国王的演讲",
-        "rawTitle": "The King's Speech",
-        "imdbRank": 167
-    },
-    {
-        "chsTitle": "美丽心灵",
-        "rawTitle": "A Beautiful Mind",
-        "imdbRank": 191
-    },
-    {
-        "chsTitle": "艺术家",
-        "rawTitle": "The Artist",
-        "imdbRank": 210
-    },
-    {
-        "chsTitle": "楚门的世界",
-        "rawTitle": "The Truman Show",
-        "imdbRank": 216
-    }
-];
