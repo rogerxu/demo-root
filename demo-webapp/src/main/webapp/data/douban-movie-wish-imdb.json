@@ -24,10 +24,22 @@
         "imdbRank": 48
     },
     {
+        "url": "http://movie.douban.com/subject/1291828/",
+        "chsTitle": "天堂电影院",
+        "rawTitle": "Nuovo Cinema Paradiso",
+        "imdbRank": 73
+    },
+    {
         "url": "http://movie.douban.com/subject/1308777/",
         "chsTitle": "暖暖内含光",
         "rawTitle": "Eternal Sunshine of the Spotless Mind",
         "imdbRank": 78
+    },
+    {
+        "url": "http://movie.douban.com/subject/1295873/",
+        "chsTitle": "偷自行车的人",
+        "rawTitle": "Ladri di biciclette",
+        "imdbRank": 89
     },
     {
         "url": "http://movie.douban.com/subject/1293399/",
