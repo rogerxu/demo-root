@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Dojo Demo</title>
+    <meta name="description" content="Dejo Demo" />
+    <meta name="viewport" content="width=device-width" />
+  </head>
+
+  <body>
+    <h1 id="greeting">Hello</h1>
+    <article>
+      <div id="content">
+      </div>
+    </article>
+
+    <!-- load Dojo -->
+    <script src="/dojo/dojo/dojo.js" data-dojo-config="async: true"></script>
+
+    <script>
+    (function(window, undefined) {
+
+        require(["dojo/dom", "dojo/fx", "dojo/domReady!"], function(dom, fx){
+            // The piece we had before...
+            var greeting = dom.byId("greeting");
+            greeting.innerHTML += " from Dojo!";
+         
+            // ...but now, with an animation!
+            fx.slideTo({
+                top: 100,
+                left: 200,
+                node: greeting
+            }).play();
+        });
+    })(this);
+    </script>
+  </body>
+</html>

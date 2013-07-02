@@ -43,10 +43,10 @@
         <web.context.name>${project.artifactId}</web.context.name>
 
         <servlet.version>3.0.1</servlet.version>
-        <jetty.version>9.0.1.v20130408</jetty.version>
+        <jetty.version>9.0.3.v20130506</jetty.version>
         <jetty.port>8080</jetty.port>
 
-        <tomcat.version>7.0.39</tomcat.version>
+        <tomcat.version>7.0.41</tomcat.version>
 
         <sqlite4java.version>0.282</sqlite4java.version>
         <sqlite4java.os>win32</sqlite4java.os> <!-- win32, linux, or macosx -->
@@ -142,7 +142,7 @@
                                 <artifactItem>
                                     <groupId>org.dojotoolkit</groupId>
                                     <artifactId>dojo-war</artifactId>
-                                    <version>1.8.0</version>
+                                    <version>1.9.0</version>
                                     <type>war</type>
                                 </artifactItem>
                             </artifactItems>
@@ -188,7 +188,7 @@
                     <contextHandlers>
                         <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
                             <war>${project.build.directory}/wars/dojo-war.war</war>
-                            <contextPath>/dojo-war</contextPath>
+                            <contextPath>/dojo</contextPath>
                         </contextHandler>
                     </contextHandlers>
                 </configuration>
