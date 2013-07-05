@@ -1,9 +1,18 @@
 Thumbs.db
-*.exe
+*.class
 *.bak
 *.orig
 *.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Maven
 target/
-.settings/
-.classpath
+
+# Eclipse Project Files
+.settings
 .project
+.classpath
