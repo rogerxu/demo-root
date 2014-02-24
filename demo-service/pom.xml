@@ -19,7 +19,7 @@
     <!-- POM SECTION: Maven Settings                                    -->
     <!-- ============================================================== -->
 
-    <artifactId>demo-webapp</artifactId>
+    <artifactId>demo-service</artifactId>
     <packaging>war</packaging>
 
 
@@ -27,8 +27,8 @@
     <!-- POM SECTION: Project Settings                                  -->
     <!-- ============================================================== -->
 
-    <name>demo-webapp Maven Webapp</name>
-    <description>Demo Web Application</description>
+    <name>Demo Web Service</name>
+    <description>Demo web service</description>
     <url>http://maven.apache.org</url>
 
 
@@ -50,7 +50,7 @@
         <jetty8.version>8.1.14.v20131031</jetty8.version>
         <jetty.port>8080</jetty.port>
 
-        <tomcat.version>7.0.41</tomcat.version>
+        <restlet.version>2.1.4</restlet.version>
 
         <sqlite4java.version>0.282</sqlite4java.version>
         <sqlite4java.os>win32</sqlite4java.os> <!-- win32, linux, or macosx -->
@@ -72,12 +72,13 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Module dependencies -->
+        <!-- Module dependencies
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>demo-util</artifactId>
             <version>${project.version}</version>
         </dependency>
+         -->
 
         <!-- Jackson for JAX-RS -->
         <dependency>
@@ -86,40 +87,23 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- SQLite -->
+        <!-- Restlet -->
         <dependency>
-            <groupId>com.almworks.sqlite4java</groupId>
-            <artifactId>sqlite4java</artifactId>
-            <version>${sqlite4java.version}</version>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>${restlet.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.almworks.sqlite4java</groupId>
-            <artifactId>sqlite4java-${sqlite4java.os}-${sqlite4java.platform}</artifactId>
-            <version>${sqlite4java.version}</version>
-            <type>${sqlite4java.type}</type>
-            <scope>runtime</scope>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.spring</artifactId>
+            <version>${restlet.version}</version>
         </dependency>
 
-        <!-- Experimental -->
-        <!-- Embedded Tomcat Server -->
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-logging-juli</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.example</artifactId>
+            <version>${restlet.version}</version>
         </dependency>
     </dependencies>
 
@@ -139,53 +123,6 @@
         -->
 
         <plugins>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <!-- Copy external WARs -->
-                    <execution>
-                        <id>copy-wars</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/wars</outputDirectory>
-                            <stripVersion>true</stripVersion>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.dojotoolkit</groupId>
-                                    <artifactId>dojo-war</artifactId>
-                                    <version>1.9.0</version>
-                                    <type>war</type>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-
-                    <!-- Copy native dependencies -->
-                    <execution>
-                        <id>copy-native-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.almworks.sqlite4java</groupId>
-                                    <artifactId>sqlite4java-${sqlite4java.os}-${sqlite4java.platform}</artifactId>
-                                    <version>${sqlite4java.version}</version>
-                                    <type>${sqlite4java.type}</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/lib</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Jetty 9 for JVM 1.7 and Servlet 3.0-->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -220,12 +157,6 @@
                         <contextPath>/${web.context.name}</contextPath>
                         <defaultsDescriptor>${basedir}/src/main/config/jetty-9/webdefault.xml</defaultsDescriptor>
                     </webApp>
-                    <contextHandlers>
-                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
-                            <war>${project.build.directory}/wars/dojo-war.war</war>
-                            <contextPath>/dojo</contextPath>
-                        </contextHandler>
-                    </contextHandlers>
                 </configuration>
             </plugin>
 
